@@ -30,18 +30,9 @@
 // }
 
 // console.log(listBox) 
-
-const getAllCards = async (url) => {
-  const response = await fetch(url)
-  const tasks = await response.json()
-  return tasks
-}
-
-const start = async function () {
-  state = await getAllCards('http://localhost:5000/trillo/cards')
-  displayTask(state)
-}
-
+fetch('http://localhost:5000/trillo/cards')
+.then((response) => response.json())
+.then(data => console.log(data))
 
 const createList = function (e) {
   e.target.style.display = 'none'

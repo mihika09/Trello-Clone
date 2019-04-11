@@ -1,5 +1,5 @@
 from app import app
-from flask import jsonify, request, url_for
+from flask import jsonify, request, url_for, render_template
 import random
 import string
 from app.dbs import Database
@@ -11,11 +11,17 @@ def generate_random_string():
 	return rand
 
 
+@app.route('/', methods=['GET'])
+def get_car():
+	return render_template("index.html")
+
+
 @app.route('/trillo/cards/', methods=['GET'])
 def get_cards():
 	query = "SELECT * FROM card"
 	result = {'items': Database().run_query(query)}
 	return jsonify(result)
+	# return render_template("index.html")
 
 
 @app.route('/trillo/cards/<id>', methods=['GET'])
