@@ -35,21 +35,33 @@ class Database:
 			sys.exit()
 
 	def run_query(self, query):
+
+		print("#######################################")
+		print("Query: ", query)
+		print("#######################################")
+		result = []
 		try:
 			self.open_connection()
 			cur = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 			cur.execute(query)
-			result = cur.fetchall()
 			self.con.commit()
-			cur.close()
-			keys = list(result[0].keys())
-			result = [self.to_dict(keys, row) for row in result]
-			return result
+			try:
+				result = cur.fetchall()
+				cur.close()
+				if result:
+					keys = list(result[0].keys())
+					result = [self.to_dict(keys, row) for row in result]
+
+			except(Exception, psycopg2.ProgrammingError) as error:
+				pass
 
 		except (Exception, psycopg2.DatabaseError) as error:
 			print("Error: ", error)
 
 		finally:
+
 			if self.con is not None:
 				self.con.close()
 				print('Database connection closed.')
+
+		return result
