@@ -1,5 +1,5 @@
-from app import db
-from flask import url_for
+"""from app import db
+# from flask import url_for
 
 
 class PaginatedAPIMixin(object):
@@ -24,6 +24,15 @@ class PaginatedAPIMixin(object):
 		return data
 
 
+class Collection(object):
+	@staticmethod
+	def to_collection_dict(query):
+		data = {
+			'items': [item.to_dict() for item in query]
+		}
+		return data
+
+
 class Board(db.Model):
 	id = db.Column(db.String(10), primary_key=True)
 	title = db.Column(db.String(64))
@@ -38,7 +47,7 @@ class List(db.Model):
 	items = db.relationship('Card', backref='list', cascade='all,delete', lazy='dynamic')
 
 
-class Card(PaginatedAPIMixin, db.Model):
+class Card(Collection, db.Model):
 	id = db.Column(db.String(10), primary_key=True)
 	title = db.Column(db.String(64))
 	description = db.Column(db.String(250))
@@ -57,4 +66,4 @@ class Card(PaginatedAPIMixin, db.Model):
 		setattr(self, 'id', cid)
 		for field in ['title', 'description', 'list_id']:
 			if field in data:
-				setattr(self, field, data[field])
+				setattr(self, field, data[field])"""
