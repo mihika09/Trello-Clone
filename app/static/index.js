@@ -30,9 +30,10 @@
 // }
 
 // console.log(listBox) 
-fetch('http://localhost:5000/trillo/cards')
-.then((response) => response.json())
-.then(data => console.log(data))
+
+fetch('http//localhost:5000/trillo/cards')
+.then(res=>res.json())
+.then(res=>console.log(res))
 
 const createList = function (e) {
   e.target.style.display = 'none'
@@ -53,13 +54,13 @@ const createList = function (e) {
   container.appendChild(span)
   parent.appendChild(container)
   listBox.appendChild(parent)
- 
+
 
   // console.log(e.target)
-  
+
   listBox.style.backgroundColor = '#dfe3e6';
   button.addEventListener('click', createListTitle)
-  
+
 
 }
 const span = document.getElementById('placeholder')
@@ -87,7 +88,7 @@ const createListTitle = function (e) {
   removeItems.parentNode.appendChild(span2)
   // console.log(removeItems.innerHTML)
   span2.addEventListener('click', createCard)
-  } 
+  }
 }
 
 const createCard = function (e) {
@@ -141,7 +142,7 @@ const addCard = function () {
       'Content-Type': 'application/json'
     }
   }
-  
+
   fetch('http://localhost:5000/trillo/cards', options)
     .then(res => res.json())
     .then(res => console.log(res))
@@ -152,4 +153,4 @@ const addCard = function () {
   console.log(card)
   return card
   }
- }
+

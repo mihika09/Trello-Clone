@@ -1,5 +1,5 @@
 from app import app
-from flask import jsonify, request, url_for
+from flask import jsonify, request, url_for, render_template
 import random
 import string
 from app.dbs import Database
@@ -9,6 +9,11 @@ import uuid
 def generate_random_string():
 	rand = ''.join([random.choice(string.ascii_letters + string.digits) for _ in range(6)])
 	return rand
+
+
+@app.route('/', methods=['GET'])
+def index():
+	return render_template("index.html")
 
 
 @app.route('/trillo/cards/', methods=['GET'])
