@@ -30,10 +30,9 @@
 // }
 
 // console.log(listBox) 
-
-fetch('http//localhost:5000/trillo/cards')
-.then(res=>res.json())
-.then(res=>console.log(res))
+fetch('http://localhost:5000/trillo/cards')
+.then((response) => response.json())
+.then(data => console.log(data))
 
 const createList = function (e) {
   e.target.style.display = 'none'
