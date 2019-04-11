@@ -1,8 +1,8 @@
-from app import app, db
+from app import app
 from flask import jsonify, request, url_for
 import random
 import string
-from app.models import Card
+from app.dbs import Database
 import uuid
 
 
@@ -11,24 +11,22 @@ def generate_random_string():
 	return rand
 
 
-@app.route('/trillo/cards/<id>', methods=['GET'])
-def get_card(id):
-	# return 'Hello, World'
-	return jsonify(Card.query.get_or_404(id).to_dict())
-
-
 @app.route('/trillo/cards', methods=['GET'])
 def get_cards():
-	page = request.args.get('page', 1, type=int)
-	per_page = min(request.args.get('per_page', 100, type=int), 100)
-	data = Card.to_collection_dict(Card.query, page, per_page, 'get_cards')
-	return jsonify(data)
-	pass
+	query = "SELECT * FROM card"
+	result = {'items': Database().run_query(query)}
+	print("Result: ", result)
+	return jsonify(result)
+
+
+@app.route('/trillo/cards/<id>', methods=['GET'])
+def get_card(id):
+	return 'Hello, World'
 
 
 @app.route('/trillo/cards', methods=['POST'])
 def create_card():
-	data = request.get_json() or {}
+	"""data = request.get_json() or {}
 	if 'title' not in data or 'list_id' not in data:
 		return 'Bad Request: Must include title of the card'
 	cid = str(uuid.uuid1())
@@ -40,9 +38,11 @@ def create_card():
 	response = jsonify(card.to_dict())
 	response.status_code = 201
 	response.headers['Location'] = url_for('get_card', id=card.id)
-	return response
+	return response"""
+	pass
 
 
 @app.route('/trillo/card/<id>', methods=['PUT'])
 def update_card(id):
 	pass
+
