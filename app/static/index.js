@@ -31,17 +31,9 @@
 
 // console.log(listBox) 
 
-const getAllCards = async (url) => {
-  const response = await fetch(url)
-  const tasks = await response.json()
-  return tasks
-}
-
-const start = async function () {
-  state = await getAllCards('http://localhost:5000/trillo/cards')
-  displayTask(state)
-}
-
+fetch('http//localhost:5000/trillo/cards')
+.then(res=>res.json())
+.then(res=>console.log(res))
 
 const createList = function (e) {
   e.target.style.display = 'none'
@@ -141,6 +133,20 @@ const addCard = function () {
   const card = document.createElement('div')
   card.setAttribute('class', 'cardholder')
   spancard.innerHTML = textArea[0].value
+  let cardDetails = {title: textArea[0].value, id:'1'}
+  const options = {
+    method: 'POST',
+    body: cardDetails,
+    headers: {
+      'Accept-Encoding': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  }
+  
+  fetch('http://localhost:5000/trillo/cards', options)
+    .then(res => res.json())
+    .then(res => console.log(res))
+}
   textArea[0].value = ''
   console.log(spancard)
   card.appendChild(spancard)
@@ -148,5 +154,3 @@ const addCard = function () {
   return card
   }
  }
-
-

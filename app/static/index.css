@@ -134,7 +134,11 @@ padding: 0;
     /* background: white; */
     width:256px;
     background: #ffffff;
-    margin-bottom: 
+    margin-bottom: 4px;
+    border-radius: 2px;
+    padding: 6px 10px;
+
+
 
 }
 
