@@ -30,6 +30,19 @@
 // }
 
 // console.log(listBox) 
+
+const getAllCards = async (url) => {
+  const response = await fetch(url)
+  const tasks = await response.json()
+  return tasks
+}
+
+const start = async function () {
+  state = await getAllCards('http://localhost:5000/trillo/cards')
+  displayTask(state)
+}
+
+
 const createList = function (e) {
   e.target.style.display = 'none'
   const container = document.createElement('div')
@@ -60,16 +73,21 @@ const createList = function (e) {
 }
 const span = document.getElementById('placeholder')
 span.addEventListener('click',createList)
+
 const createListTitle = function (e) {
   const removeItems = e.target.parentNode.parentNode
   const input = removeItems.firstChild
+  const emptyDiv = document.createElement('div')
+  emptyDiv.setAttribute('class', 'emptyDiv')
   // console.log(input.value)
   if(input.value) {
   removeItems.style.display = 'none'
   const span = document.createElement('span')
   span.innerHTML = input.value
   span.setAttribute('class', 'listtitle')
+  span.setAttribute('id', 'title')
   removeItems.parentNode.appendChild(span)
+  removeItems.parentNode.appendChild(emptyDiv)
   const span2 = document.createElement('span')
   span2.setAttribute('class', 'createCard')
   const a = document.createElement('a')
@@ -104,25 +122,31 @@ const createCard = function (e) {
 }
 
 const addCard = function () {
+  let newCard = cardBox()
+  const listTitle = document.getElementById('title')
+  // console.log()
+  listTitle.appendChild(newCard)
+  // mainDiv.insertad(card, listTitle)
+  console.log('main-->'+mainDiv)
+  // mainDiv.firstChild.insertAdjacentElement('afterend', spancard);
+  // createCardLink.style.display = 'none'
+}
+ const cardBox = function () {
   const textArea = document.getElementsByClassName('card')
-  const mainDiv = document.getElementById('listbox')
+  if(textArea[0].value) {
   const listTitle = document.getElementsByClassName('card')
   const spancard = document.createElement('span')
   const createCardLink = document.getElementsByClassName('createCard')
-
   // console.log(textArea[0].value)
   const card = document.createElement('div')
   card.setAttribute('class', 'cardholder')
   spancard.innerHTML = textArea[0].value
+  textArea[0].value = ''
   console.log(spancard)
   card.appendChild(spancard)
-  // mainDiv[0].appendChild(card)
-  // mainDiv.insertad(card, listTitle)
-  console.log('main-->'+mainDiv)
-  mainDiv.firstChild.insertAdjacentElement('afterend', spancard);
-  // createCardLink.style.display = 'none'
-  
-}
-
+  console.log(card)
+  return card
+  }
+ }
 
 
