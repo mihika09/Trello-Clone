@@ -51,7 +51,7 @@ def create_card():
 	return jsonify(result)
 
 
-@app.route('/trillo/card/<id>', methods=['PUT'])
+@app.route('/trillo/cards/<id>', methods=['PUT'])
 def update_card(id):
 
 	data = request.get_json() or {}
@@ -71,7 +71,7 @@ def update_card(id):
 	return jsonify(result)
 
 
-@app.route('/trillo/card/<id>', methods=['DELETE'])
+@app.route('/trillo/cards/<id>', methods=['DELETE'])
 def delete_card(id):
 
 	data = request.get_json() or {}
