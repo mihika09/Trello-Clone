@@ -31,7 +31,7 @@
 
 // console.log(listBox) 
 
-fetch('http//localhost:5000/trillo/cards')
+fetch('http://localhost:5000/trillo/cards')
 .then(res=>res.json())
 .then(res=>console.log(res))
 
@@ -60,7 +60,21 @@ const createList = function (e) {
 
   listBox.style.backgroundColor = '#dfe3e6';
   button.addEventListener('click', createListTitle)
+  span.addEventListener('click', getBack)
 
+}
+
+const getBack = function (e) {
+  // // console.log(e.target.parentNode)
+  // const listBox = document.getElementById('listbox')
+  // console.log(listBox.parentNode)
+  // while (listBox.firstChild) {
+  //   listBox.removeChild(listBox.firstChild)
+  // }
+  // const span = document.createElement('span')
+  // span.setAttribute('id', 'placeholder')
+  // listBox.appendChild(span)
+  // span.addEventListener('click',createList)
 
 }
 const span = document.getElementById('placeholder')
@@ -146,11 +160,11 @@ const addCard = function () {
   fetch('http://localhost:5000/trillo/cards', options)
     .then(res => res.json())
     .then(res => console.log(res))
-}
+
   textArea[0].value = ''
   console.log(spancard)
   card.appendChild(spancard)
   console.log(card)
   return card
   }
-
+ }

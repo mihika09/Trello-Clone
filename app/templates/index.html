@@ -7,10 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    </link>
-
 </head>
 
 <body class="has-background-info">
@@ -36,7 +32,7 @@
         </div>
         <div class="createBoard">
           <a href="#" id="board"> Create Board...</a>
-          <a href="#">Create Team...</a>  
+          <a href="#">Create Team...</a>
         </div>
         <div id="title-div">
 
@@ -45,9 +41,7 @@
     </div> -->
   <div class="list" id="listbox">
       <span id="placeholder">+ Add another list</span>
-
   </div>
-<script src="../static/index.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
-
 </html>
