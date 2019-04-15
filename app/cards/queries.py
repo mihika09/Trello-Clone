@@ -14,3 +14,15 @@ class Query:
 		values = ', '.join("'{}'".format(value) if type(value) == str else str(value) for _, value in data.items())
 
 		return "INSERT INTO card ({}) VALUES ({})".format(keys, values)
+
+	@staticmethod
+	def edit_card(data, id):
+		keys = list([key for key, _ in data.items()])
+		values = list(["'{}'".format(value) if type(value) == str else str(value) for _, value in data.items()])
+
+		set = ', '.join("{}={}".format(key, value) for key, value in zip(keys, values))
+		return "UPDATE card SET {} WHERE id = '{}'".format(set, id)
+
+	@staticmethod
+	def delete_card(id):
+		return "DELETE FROM card WHERE id = '{}'".format(id)
