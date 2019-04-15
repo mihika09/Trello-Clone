@@ -4,8 +4,8 @@ import os
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
-from app.users import bp as users_bp
-app.register_blueprint(users_bp)
+from app.cards import bp as cards_bp
+app.register_blueprint(cards_bp)
 
 from app import routes, dbs
 

@@ -1,24 +1,24 @@
-from app import app
-from flask import jsonify, request
+from app.cards import bp
+from flask import jsonify, request, render_template
 from app.dbs import Database
 import uuid
 
 
-@app.route('/trillo/cards/', methods=['GET'])
+@bp.route('/trillo/cards/', methods=['GET'])
 def get_cards():
 	query = "SELECT * FROM card"
 	result = {'items': Database().run_query(query)}
 	return jsonify(result)
 
 
-@app.route('/trillo/cards/<id>', methods=['GET'])
+@bp.route('/trillo/cards/<id>', methods=['GET'])
 def get_card(id):
 	query = "SELECT * FROM card WHERE id = '{}'".format(id)
 	result = {'items': Database().run_query(query)}
 	return jsonify(result)
 
 
-@app.route('/trillo/cards', methods=['POST'])
+@bp.route('/trillo/cards', methods=['POST'])
 def create_card():
 
 	data = request.get_json() or {}
@@ -39,7 +39,7 @@ def create_card():
 	return jsonify(result)
 
 
-@app.route('/trillo/cards/<id>', methods=['PUT'])
+@bp.route('/trillo/cards/<id>', methods=['PUT'])
 def update_card(id):
 
 	data = request.get_json() or {}
@@ -59,7 +59,7 @@ def update_card(id):
 	return jsonify(result)
 
 
-@app.route('/trillo/cards/<id>', methods=['DELETE'])
+@bp.route('/trillo/cards/<id>', methods=['DELETE'])
 def delete_card(id):
 
 	data = request.get_json() or {}
