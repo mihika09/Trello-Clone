@@ -4,6 +4,9 @@ import os
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
+from app.users import bp as users_bp
+app.register_blueprint(users_bp)
+
 from app import routes, dbs
 
 # ---------------------------------------------------------------------------------------------------------
@@ -30,7 +33,7 @@ if res:
 
 if not res:
 	query = "create table board (" \
-			"id VARCHAR(20) PRIMARY KEY," \
+			"id VARCHAR(40) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"visibility VARCHAR(20) CHECK (visibility = 'public' or visibility = 'private') DEFAULT 'public');"
 	dbs.Database().run_query(query)
@@ -49,7 +52,7 @@ if res:
 
 if not res:
 	query = "create table list (" \
-			"id VARCHAR(20) PRIMARY KEY," \
+			"id VARCHAR(40) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"board_id VARCHAR(20)," \
 			"FOREIGN KEY (board_id) REFERENCES board(id))"
@@ -69,7 +72,7 @@ if res:
 
 if not res:
 	query = "create table card (" \
-			"id VARCHAR(20) PRIMARY KEY," \
+			"id VARCHAR(40) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"description TEXT," \
 			"list_id VARCHAR(20)," \

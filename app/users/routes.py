@@ -1,13 +1,10 @@
 from app import app
-from flask import render_template
+from flask import jsonify, request
+from app.dbs import Database
+import uuid
 
 
-@app.route('/', methods=['GET'])
-def index():
-	return render_template("index.html")
-
-
-"""@app.route('/trillo/cards/', methods=['GET'])
+@app.route('/trillo/cards/', methods=['GET'])
 def get_cards():
 	query = "SELECT * FROM card"
 	result = {'items': Database().run_query(query)}
@@ -28,7 +25,7 @@ def create_card():
 	print(type(data))
 	if 'title' not in data or 'list_id' not in data:
 		return 'Bad Request: Must include title and list_id of the card'
-	cid = str(uuid.uuid1())
+	cid = str(uuid.uuid1())[0:9]
 	data['id'] = cid
 
 	keys = ', '.join(key for key, _ in data.items())
@@ -78,4 +75,4 @@ def delete_card(id):
 	if not result:
 		return "Successfully Deleted the item"
 	else:
-		return "Delete unsuccessful" """
+		return "Delete unsuccessful"
