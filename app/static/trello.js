@@ -22,16 +22,21 @@ const addListId = function (listId) {
   return span
 }
 
+const editCard = function (e) {
+const card = document.getElementById
+}
+
 const createCardBox = function (cardName, id) {
-  const spancard = document.createElement('span')
-  const card = document.createElement('div')
-  card.setAttribute('class', 'cardholder')
-  spancard.innerHTML = cardName
-  spancard.setAttribute('id', id)
-  console.log(spancard)
+  const spanCard = document.createElement('span')
+  const card = createElement('div', 'cardholder')
+  card.setAttribute('id', 'spanCard')
+  spanCard.innerHTML = cardName
+  spanCard.setAttribute('id', id)
+  console.log(spanCard)
   const i = createElement('i', 'fas fa-pencil-alt')
-  spancard.appendChild(i)
-  card.appendChild(spancard)
+  spanCard.appendChild(i)
+  i.addEventListener('click', editCard)
+  card.appendChild(spanCard)
   console.log(card)
   return card
 }
@@ -47,28 +52,28 @@ const displayCard = function (card) {
 const addCard = function (cardTitle) {
   const card = createCardBox(cardTitle)
   displayCard(card)
-  let cardDetails = { title: cardTitle, id: '1' }
-  const options = {
-    method: 'POST',
-    body: cardDetails,
-    headers: {
-      'Accept-Encoding': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  }
-
-  fetch('http://localhost:5000/trillo/cards', options)
-    .then(res => res.json())
-    .then(res => {
-      console.log(res)
-      // addListId(res.list_id)
-    })
 }
 
 const checkCard = function () {
   const textArea = document.getElementsByClassName('card')
   if (textArea[0].value) {
     addCard(textArea[0].value)
+    const cardDetails = { title: textArea[0].value, list_id: '1' }
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(cardDetails),
+      headers: {
+        'Accept-Encoding': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+
+    fetch('http://localhost:5000/trillo/cards', options)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res)
+      // addListId(res.list_id)
+      })
     // const listTitle = document.getElementsByClassName('card')
     textArea[0].value = ''
   }
@@ -113,12 +118,15 @@ createListTitle('1')
 
 fetch('http://localhost:5000/trillo/cards')
   .then(res => res.json())
-  .then(res => {
-    let items = res['cards']
+  .then(data => {
+    let items = data['items']
+    console.log(items)
     for (let item in items) {
-      console.log(items[item]['title'])
+      // console.log(items[item]['title'])
+      console.log(item)
       addCard(items[item]['title'])
     }
+    console.log(data)
   })
 
 const checkListTitle = function () {
