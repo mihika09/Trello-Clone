@@ -5,6 +5,7 @@ import logging
 import psycopg2
 import urllib.parse as urlparse
 import os
+from flask import abort
 
 
 class Database:
@@ -17,7 +18,6 @@ class Database:
 		self.host = url.hostname
 		self.port = url.port
 		self.con = None
-		print(self.db, self.username, self.host, self.port, self.password)
 
 		"""self.username = ''
 				self.host = 'localhost'
@@ -48,11 +48,21 @@ class Database:
 	def run_query(self, query):
 
 		result = []
+		error = None
+		print("Query: ", query)
 		try:
 			self.open_connection()
 			cur = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
-			cur.execute(query)
-			self.con.commit()
+
+			try:
+				cur.execute(query)
+				self.con.commit()
+
+			except (Exception, psycopg2.DatabaseError) as e:
+				print("Error#1: ", e)
+				error = 400
+				abort(400)
+
 			try:
 				result = cur.fetchall()
 				cur.close()
@@ -60,11 +70,14 @@ class Database:
 					keys = list(result[0].keys())
 					result = [self.to_dict(keys, row) for row in result]
 
-			except(Exception, psycopg2.ProgrammingError):
-				pass
+			except(Exception, psycopg2.ProgrammingError) as e:
+				print("Error#2: ", e)
 
-		except (Exception, psycopg2.DatabaseError) as error:
-			print("Error: ", error)
+		except (Exception, psycopg2.DatabaseError) as e:
+			print("Error#3: ", e)
+			if error is not None:
+				abort(error)
+			abort(500)
 
 		finally:
 

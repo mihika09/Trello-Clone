@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, abort
 import os
 
 app = Flask(__name__)
@@ -6,6 +6,9 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 
 from app.cards import bp as cards_bp
 app.register_blueprint(cards_bp)
+
+from app.lists import bp as lists_bp
+app.register_blueprint(lists_bp)
 
 from app import routes, dbs
 
@@ -27,13 +30,12 @@ print(result[0][0])
 
 res = dbs.Database().run_query("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='board'")
 
-
 if res:
 	print("Table exists")
 
 if not res:
 	query = "create table board (" \
-			"id VARCHAR(40) PRIMARY KEY," \
+			"id VARCHAR(36) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"visibility VARCHAR(20) CHECK (visibility = 'public' or visibility = 'private') DEFAULT 'public');"
 	dbs.Database().run_query(query)
@@ -52,10 +54,10 @@ if res:
 
 if not res:
 	query = "create table list (" \
-			"id VARCHAR(40) PRIMARY KEY," \
+			"id VARCHAR(36) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"board_id VARCHAR(20)," \
-			"FOREIGN KEY (board_id) REFERENCES board(id))"
+			"FOREIGN KEY (board_id) REFERENCES board(id) ON DELETE CASCADE)"
 	dbs.Database().run_query(query)
 	print("----------------------------------------------------")
 	print("List created")
@@ -72,11 +74,11 @@ if res:
 
 if not res:
 	query = "create table card (" \
-			"id VARCHAR(40) PRIMARY KEY," \
+			"id VARCHAR(36) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"description TEXT," \
 			"list_id VARCHAR(20)," \
-			"FOREIGN KEY (list_id) REFERENCES list(id))"
+			"FOREIGN KEY (list_id) REFERENCES list(id) ON DELETE CASCADE) "
 	dbs.Database().run_query(query)
 	print("----------------------------------------------------")
 	print("Card created")
