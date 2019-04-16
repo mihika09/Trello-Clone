@@ -49,7 +49,7 @@ def create_card():
 def update_card(id):
 
 	data = request.get_json() or {}
-	if 'title' not in data or 'list_id' not in data:
+	if not data:
 		abort(400)
 
 	query = CardQuery().get_card_by_id(id)
@@ -64,7 +64,7 @@ def update_card(id):
 	query = CardQuery().get_card_by_id(id)
 	card = Database().run_query(query)
 
-	return jsonify({'items': card})
+	return jsonify({'cards': card})
 
 
 @bp.route('/trillo/cards/<id>', methods=['DELETE'])
