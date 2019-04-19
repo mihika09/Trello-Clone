@@ -10,6 +10,8 @@ from flask import abort
 
 class Database:
 
+	con = None
+
 	def __init__(self):
 		url = urlparse.urlparse(os.environ['DATABASE_URL'])
 		self.db = url.path[1:]
@@ -17,12 +19,6 @@ class Database:
 		self.password = url.password
 		self.host = url.hostname
 		self.port = url.port
-		self.con = None
-
-		"""self.username = ''
-				self.host = 'localhost'
-				self.port = 5432
-				self.db = ''"""
 
 	@staticmethod
 	def to_dict(keys, result):
@@ -34,12 +30,17 @@ class Database:
 
 	def open_connection(self):
 
-		try:
+		"""try:
 			if self.con is None:
 				self.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port, password=self.password)
 
 			elif not self.con.open:
-				self.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port)
+				self.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port)"""
+
+		try:
+			Database.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port,
+									password=self.password)
+			print("Database connection opened")
 
 		except:
 			logging.error("ERROR: Could not connect to Postgres.")
@@ -49,9 +50,11 @@ class Database:
 
 		result = []
 		error = None
-		print("Query: ", query)
+
 		try:
-			self.open_connection()
+			if Database.con is None or Database.con.closed > 0:
+				self.open_connection()
+
 			cur = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 			try:
@@ -60,6 +63,8 @@ class Database:
 
 			except (Exception, psycopg2.DatabaseError) as e:
 				print("Error#1: ", e)
+				cur.execute("ROLLBACK")
+				self.con.commit()
 				error = 400
 				abort(400)
 
@@ -79,10 +84,9 @@ class Database:
 				abort(error)
 			abort(500)
 
-		finally:
-
+		"""finally:
 			if self.con is not None:
 				self.con.close()
-				print('Database connection closed.')
+				print('Database connection closed.')"""
 
 		return result
