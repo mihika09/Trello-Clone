@@ -27,7 +27,7 @@ def create_list():
 	if 'title' not in data or 'board_id' not in data:
 		abort(400)
 
-	cid = str(uuid.uuid1())[0:9]
+	cid = str(uuid.uuid1())
 	data['id'] = cid
 
 	query = Query().add_list(data)

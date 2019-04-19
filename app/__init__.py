@@ -1,5 +1,6 @@
-from flask import Flask, abort
+from flask import Flask
 import os
+
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -10,7 +11,11 @@ app.register_blueprint(cards_bp)
 from app.lists import bp as lists_bp
 app.register_blueprint(lists_bp)
 
+from app.boards import bp as boards_bp
+app.register_blueprint(boards_bp)
+
 from app import routes, dbs
+
 
 # ---------------------------------------------------------------------------------------------------------
 
@@ -41,9 +46,9 @@ if not res:
 	dbs.Database().run_query(query)
 	print("----------------------------------------------------")
 	print("Board created")
-	query = "INSERT INTO board VALUES('1', 'test_board');"
+	"""query = "INSERT INTO board VALUES('1', 'test_board');"
 	dbs.Database().run_query(query)
-	print("----------------------------------------------------")
+	print("----------------------------------------------------")"""
 
 # ---------------------------------------------------------------------------------------------------------
 
@@ -56,14 +61,11 @@ if not res:
 	query = "create table list (" \
 			"id VARCHAR(36) PRIMARY KEY," \
 			"title VARCHAR(100)," \
-			"board_id VARCHAR(20)," \
+			"board_id VARCHAR(36)," \
 			"FOREIGN KEY (board_id) REFERENCES board(id) ON DELETE CASCADE)"
 	dbs.Database().run_query(query)
 	print("----------------------------------------------------")
 	print("List created")
-	query = "INSERT INTO list VALUES('1', 'test_list', '1');"
-	dbs.Database().run_query(query)
-	print("----------------------------------------------------")
 
 # ---------------------------------------------------------------------------------------------------------
 
@@ -77,8 +79,9 @@ if not res:
 			"id VARCHAR(36) PRIMARY KEY," \
 			"title VARCHAR(100)," \
 			"description TEXT," \
-			"list_id VARCHAR(20)," \
+			"list_id VARCHAR(36)," \
 			"FOREIGN KEY (list_id) REFERENCES list(id) ON DELETE CASCADE) "
 	dbs.Database().run_query(query)
 	print("----------------------------------------------------")
 	print("Card created")
+	print("----------------------------------------------------")

@@ -33,7 +33,7 @@ def create_card():
 	if 'title' not in data or 'list_id' not in data:
 		abort(400)
 
-	cid = str(uuid.uuid1())[0:9]
+	cid = str(uuid.uuid1())
 	data['id'] = cid
 
 	query = CardQuery().add_card(data)
