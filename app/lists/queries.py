@@ -26,3 +26,7 @@ class Query:
 	@staticmethod
 	def delete_list(id):
 		return "DELETE FROM list WHERE id = '{}'".format(id)
+
+	@staticmethod
+	def get_board_lists(board_id):
+		return "SELECT * FROM list WHERE board_id = '{}'".format(board_id)
