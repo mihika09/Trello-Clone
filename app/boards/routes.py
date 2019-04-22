@@ -1,7 +1,7 @@
 from app.boards import bp
 from app.boards.queries import BoardQuery
 from app.dbs import Database
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, make_response
 import uuid
 from app.lists.queries import Query
 from app.cards.queries import CardQuery
@@ -88,3 +88,6 @@ def delete_board(id):
 	return "Delete successful"
 
 
+@bp.errorhandler(404)
+def not_found_error(error):
+	return make_response(jsonify({"error": "Not found"}), 404)

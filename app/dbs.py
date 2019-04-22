@@ -84,9 +84,9 @@ class Database:
 				abort(error)
 			abort(500)
 
-		"""finally:
-			if self.con is not None:
-				self.con.close()
-				print('Database connection closed.')"""
-
 		return result
+
+	def close_connection(self):
+		if self.con is not None:
+			self.con.close()
+			print('Database connection closed.')
