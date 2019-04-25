@@ -1,7 +1,7 @@
 'use strict'
 const mainDiv = document.getElementById('listbox')
 const listAddButton = document.getElementById('addButton')
-// const closeButton = document.getElementById('closeButton')
+const closeButton = document.getElementById('closeButton')
 const listTitleDiv = document.getElementById('titleparent')
 
 // let obj = { items: [
@@ -23,15 +23,25 @@ const addListId = function (listId) {
 }
 
 const editCard = function (e) {
-const card = document.getElementById
+  // const card = document.getElementById('card')
+  const span = document.getElementById('cardspan')
+  const div = createElement('div', 'editmode')
+  const textArea = createElement('textArea', 'card')
+  toggleModal(div)
+  textArea.textContent = span.textContent
+  div.appendChild(textArea)
+}
+const toggleModal = function (div) {
+  // var update = document.querySelector('.editmode')
+  div.classList.toggle('show-modal')
 }
 
 const createCardBox = function (cardName, id) {
   const spanCard = document.createElement('span')
   const card = createElement('div', 'cardholder')
-  card.setAttribute('id', 'spanCard')
-  spanCard.innerHTML = cardName
-  spanCard.setAttribute('id', id)
+  card.setAttribute('id', 'card')
+  spanCard.textContent = cardName
+  spanCard.setAttribute('id', 'cardspan')
   console.log(spanCard)
   const i = createElement('i', 'fas fa-pencil-alt')
   spanCard.appendChild(i)
@@ -44,6 +54,7 @@ const createCardBox = function (cardName, id) {
 const displayCard = function (card) {
   const listTitle = document.getElementById('title')
   listTitle.appendChild(card)
+  document.getElementById('placeholder').style.display = 'none'
   // mainDiv.insertad(card, listTitle)
   // mainDiv.firstChild.insertAdjacentElement('afterend', spancard);
   // createCardLink.style.display = 'none'
@@ -91,9 +102,9 @@ const createCard = function (e) {
   const button = createElement('button', 'addButton')
   button.setAttribute('id', 'addButton')
   button.innerHTML = 'Add card'
-  const span = document.createElement('span')
+  const span = createElement('span', 'closeButton')
+  span.setAttribute('id', 'closecard')
   span.innerHTML = '&times;'
-  span.setAttribute('class', 'closeButton')
   container.appendChild(button)
   container.appendChild(span)
   e.target.parentNode.parentNode.insertBefore(container, e.target.parentNode.parentNode.lastChild)

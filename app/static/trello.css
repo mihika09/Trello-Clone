@@ -147,5 +147,14 @@ text-decoration: none;
     text-rendering: auto;
     line-height: 1;
 }
+.editmode{
+    width: 200px;
+    height: 300px;
+}
+.show-model{
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+}
 
 
