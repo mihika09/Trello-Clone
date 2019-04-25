@@ -1,4 +1,4 @@
-class Query:
+class CardQuery:
 
 	@staticmethod
 	def get_all_cards():
@@ -26,3 +26,7 @@ class Query:
 	@staticmethod
 	def delete_card(id):
 		return "DELETE FROM card WHERE id = '{}'".format(id)
+
+	@staticmethod
+	def get_list_cards(list_id):
+		return "SELECT * FROM card WHERE list_id = '{}'".format(list_id)

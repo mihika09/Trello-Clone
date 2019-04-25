@@ -1,71 +1,81 @@
 from app.cards import bp
-from flask import jsonify, request, render_template
+from flask import jsonify, request, abort
 from app.dbs import Database
 import uuid
-from app.cards.queries import Query
+from app.cards.queries import CardQuery
 
 
+# remove this later
 @bp.route('/trillo/cards/', methods=['GET'])
 def get_cards():
-	query = Query().get_all_cards()
-	result = {'items': Database().run_query(query)}
-	return jsonify(result)
+	query = CardQuery().get_all_cards()
+	cards = Database().run_query(query)
+
+	return jsonify({'cards': cards})
 
 
 @bp.route('/trillo/cards/<id>', methods=['GET'])
 def get_card(id):
-	query = Query().get_card_by_id(id)
-	result = {'items': Database().run_query(query)}
-	return jsonify(result)
+	query = CardQuery().get_card_by_id(id)
+	card = Database().run_query(query)
+
+	if not card:
+		abort(404)
+
+	return jsonify({'cards': card})
 
 
 @bp.route('/trillo/cards', methods=['POST'])
 def create_card():
 
 	data = request.get_json() or {}
-	print(type(data))
+
 	if 'title' not in data or 'list_id' not in data:
-		return 'Bad Request: Must include title and list_id of the card'
-	cid = str(uuid.uuid1())[0:9]
+		abort(400)
+
+	cid = str(uuid.uuid1())
 	data['id'] = cid
 
-	query = Query().add_card(data)
+	query = CardQuery().add_card(data)
 	Database().run_query(query)
 
-	query = Query().get_card_by_id(cid)
-	result = {'items': Database().run_query(query)}
-	return jsonify(result)
+	query = CardQuery().get_card_by_id(cid)
+	card = Database().run_query(query)
+
+	return jsonify({'cards': card}), 201
 
 
 @bp.route('/trillo/cards/<id>', methods=['PUT'])
 def update_card(id):
 
 	data = request.get_json() or {}
-	if 'title' not in data or 'list_id' not in data:
-		return 'Bad Request: Must include title and list_id of the card'
+	if not data:
+		abort(400)
 
-	query = Query().edit_card(data, id)
+	query = CardQuery().get_card_by_id(id)
+	card = Database().run_query(query)
+
+	if not card:
+		abort(404)
+
+	query = CardQuery().edit_card(data, id)
 	Database().run_query(query)
 
-	query = Query().get_card_by_id(id)
-	result = {'items': Database().run_query(query)}
-	return jsonify(result)
+	query = CardQuery().get_card_by_id(id)
+	card = Database().run_query(query)
+
+	return jsonify({'cards': card})
 
 
 @bp.route('/trillo/cards/<id>', methods=['DELETE'])
 def delete_card(id):
 
-	data = request.get_json() or {}
-	if 'title' not in data or 'list_id' not in data:
-		return 'Bad Request: Must include title and list_id of the card'
+	query = CardQuery().get_card_by_id(id)
+	card = Database().run_query(query)
+	if not card:
+		abort(404)
 
-	query = Query().delete_card(id)
-
+	query = CardQuery().delete_card(id)
 	Database().run_query(query)
 
-	query = Query().get_card_by_id(id)
-	result = Database().run_query(query)
-	if not result:
-		return "Successfully Deleted the item"
-	else:
-		return "Delete unsuccessful"
+	return "Delete successful"

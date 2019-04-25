@@ -5,9 +5,12 @@ import logging
 import psycopg2
 import urllib.parse as urlparse
 import os
+from flask import abort
 
 
 class Database:
+
+	con = None
 
 	def __init__(self):
 		url = urlparse.urlparse(os.environ['DATABASE_URL'])
@@ -16,13 +19,6 @@ class Database:
 		self.password = url.password
 		self.host = url.hostname
 		self.port = url.port
-		self.con = None
-		print(self.db, self.username, self.host, self.port, self.password)
-
-		"""self.username = ''
-				self.host = 'localhost'
-				self.port = 5432
-				self.db = ''"""
 
 	@staticmethod
 	def to_dict(keys, result):
@@ -34,12 +30,17 @@ class Database:
 
 	def open_connection(self):
 
-		try:
+		"""try:
 			if self.con is None:
 				self.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port, password=self.password)
 
 			elif not self.con.open:
-				self.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port)
+				self.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port)"""
+
+		try:
+			Database.con = psycopg2.connect(dbname=self.db, user=self.username, host=self.host, port=self.port,
+									password=self.password)
+			print("Database connection opened")
 
 		except:
 			logging.error("ERROR: Could not connect to Postgres.")
@@ -48,11 +49,25 @@ class Database:
 	def run_query(self, query):
 
 		result = []
+		error = None
+
 		try:
-			self.open_connection()
+			if Database.con is None or Database.con.closed > 0:
+				self.open_connection()
+
 			cur = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
-			cur.execute(query)
-			self.con.commit()
+
+			try:
+				cur.execute(query)
+				self.con.commit()
+
+			except (Exception, psycopg2.DatabaseError) as e:
+				print("Error#1: ", e)
+				cur.execute("ROLLBACK")
+				self.con.commit()
+				error = 400
+				abort(400)
+
 			try:
 				result = cur.fetchall()
 				cur.close()
@@ -60,16 +75,18 @@ class Database:
 					keys = list(result[0].keys())
 					result = [self.to_dict(keys, row) for row in result]
 
-			except(Exception, psycopg2.ProgrammingError):
-				pass
+			except(Exception, psycopg2.ProgrammingError) as e:
+				print("Error#2: ", e)
 
-		except (Exception, psycopg2.DatabaseError) as error:
-			print("Error: ", error)
-
-		finally:
-
-			if self.con is not None:
-				self.con.close()
-				print('Database connection closed.')
+		except (Exception, psycopg2.DatabaseError) as e:
+			print("Error#3: ", e)
+			if error is not None:
+				abort(error)
+			abort(500)
 
 		return result
+
+	def close_connection(self):
+		if self.con is not None:
+			self.con.close()
+			print('Database connection closed.')
