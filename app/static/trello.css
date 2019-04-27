@@ -147,14 +147,110 @@ text-decoration: none;
     text-rendering: auto;
     line-height: 1;
 }
-.editmode{
+/* .editmode{
     width: 200px;
     height: 300px;
+    /* opacity: 1;
+    visibility: visible; */
+    /* transform: scale(1.0); */
+    /* color: #fff;
+} */ 
+
+.updateTask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
 }
-.show-model{
+.task-editor {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 21%;
+    left: 11%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 13rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+}
+.show-modal {
     opacity: 1;
     visibility: visible;
     transform: scale(1.0);
 }
+.saveButton{
+    position: absolute;
+    top:30%;
+    left:1%;
+    background-color:green;
+    color: white;
+    border:none;
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin-right: 10px;
+}
+
+.editFeild{
+    display: block;
+    border: none;
+    outline: none;
+    resize: none;
+    box-shadow: none;
+    /* margin-bottom: 4px; */
+    position: absolute;
+    top :15%;
+    left:2%;
+    width:60px;
+    border-radius: 2px;
+    width:240px;
+}
+/* -------------------------------------------------------------------------------------------------------- */
+/* .updateTask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 240px;
+    height: 88px;
+    background-color:white;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    margin-top: 91px;
+    margin-left: 16px;
+    border-radius: 2px;
+    padding:8px;
+    padding-top: 6px;
+    padding-bottom: 2px;
+}
+.editmode{
+    width: 340px;
+    height: 180px; 
+    /* margin-top: 91px;
+    margin-left: 16px;
+    border-radius: 2px;
+    padding:8px;
+    padding-top: 6px;
+    padding-bottom: 2px;
+    */
+  /* display: block;
+   border: none;
+   outline: none;
+   resize: none;
+   box-shadow: none;
+   margin: 0;
+   padding: 0; */
+/* } */ 
 
 

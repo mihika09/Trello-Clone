@@ -14,7 +14,4 @@ app.register_blueprint(lists_bp)
 from app.boards import bp as boards_bp
 app.register_blueprint(boards_bp)
 
-from app.errors import bp as errors_bp
-app.register_blueprint(errors_bp)
-
 from app import create_db, routes, dbs
