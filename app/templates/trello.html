@@ -3,7 +3,8 @@
     <head>
         <meta charset="utf-8">
         <title>Trillo Board</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='trello.css') }}">
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='trello.css') }}"> -->
+        <link rel="stylesheet" href="../static/trello.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         </head>
@@ -11,6 +12,7 @@
         <div class="container">
             <div class="header">
                 <h1>Trello</h1>
+                <div class="plus"><a>+</a></div>
             </div>
             <div class="list" id="listbox">
               <div id="titleparent">
@@ -21,8 +23,12 @@
                     </div>
               </div>
             </div>
-
+            <div class="updateTask" id="mod">
+                <div class="task-editor">
+                </div>
+            </div>
         </div>
-        <script type="text/javascript" src="{{ url_for('static', filename='trello.js') }}"></script>
+        <!-- <script type="text/javascript" src="{{ url_for('static', filename='trello.js') }}"></script> -->
+        <script src="../static/trello.js"></script>
     </body>
 </html>

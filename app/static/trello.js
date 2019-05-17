@@ -1,63 +1,92 @@
-'use strict'
 const mainDiv = document.getElementById('listbox')
 const listAddButton = document.getElementById('addButton')
 // const closeButton = document.getElementById('closeButton')
 const listTitleDiv = document.getElementById('titleparent')
 
-// let obj = { items: [
-//   { description: 'test', id: 'a1065c22-', list_id: '1', title: 'card#C10' },
-//   { description: 'test', id: 'cdd606e4-', list_id: '1', title: 'card#C1000000' }]
-// }
-
-const createElement = function (element, classVal) {
-  const span = document.createElement(element)
-  span.setAttribute('class', classVal)
-  return span
+const addListLink = function () {
+  const span = document.createElement('span')
+  span.setAttribute('id', 'placeholder')
+  span.textContent = '+ Add list'
+  mainDiv.appendChild(span)
+  span.addEventListener('click', createList)
 }
 
-const addListId = function (listId) {
-  const span = createElement('span', 'listtitle')
-  span.textContent = listId
-  span.setAttribute('id', 'title')
-  return span
+const createList = function (e) {
+  listTitleDiv.style.display = 'inline'
+  mainDiv.style.backgroundColor = '#dfe3e6'
+  e.target.style.display = 'none'
+  listAddButton.addEventListener('click', checkListTitle)
+  listAddButton.addEventListener('click', addAnotherList)
+
+  // closeButton.addEventListener('click', listLinkAgain)
+}
+const addAnotherList = function () {
+  // const main = document.querySelector('.container')
+  const div2 = createElement('div', 'list2')
+  const div1 = createList()
+  div2.appendChild(div1)
+  // main.appendChild(div2)
 }
 
-const editCard = function (e) {
-const card = document.getElementById
+const checkListTitle = function () {
+  const input = document.getElementById('inputForList')
+  // console.log(input)
+  if (input.value) {
+    createListTitle(input.value)
+    input.value = ''
+    mainDiv.style.backgroundColor = '#dfe3e6'
+  }
 }
 
-const createCardBox = function (cardName, id) {
-  const spanCard = document.createElement('span')
-  const card = createElement('div', 'cardholder')
-  card.setAttribute('id', 'spanCard')
-  spanCard.innerHTML = cardName
-  spanCard.setAttribute('id', id)
-  console.log(spanCard)
-  const i = createElement('i', 'fas fa-pencil-alt')
-  spanCard.appendChild(i)
-  i.addEventListener('click', editCard)
-  card.appendChild(spanCard)
-  console.log(card)
-  return card
+const createListTitle = function (listTitle) {
+  const span = addListId(listTitle)
+  listTitleDiv.style.display = 'none'
+  mainDiv.style.backgroundColor = 'rgba(0,0,0,.12)'
+  mainDiv.appendChild(span)
+  createCardLink()
 }
 
-const displayCard = function (card) {
-  const listTitle = document.getElementById('title')
-  listTitle.appendChild(card)
-  // mainDiv.insertad(card, listTitle)
-  // mainDiv.firstChild.insertAdjacentElement('afterend', spancard);
-  // createCardLink.style.display = 'none'
+const createCardLink = function () {
+  const span = createElement('span', 'createCard')
+  const a = createElement('a', 'createCardLink')
+  a.style.color = '#798d99'
+  a.textContent = 'Add a card'
+  span.appendChild(a)
+  mainDiv.appendChild(span)
+  span.addEventListener('click', createCard)
+  // span.addEventListener('click', createList)
 }
 
-const addCard = function (cardTitle) {
-  const card = createCardBox(cardTitle)
-  displayCard(card)
+const createCard = function (e) {
+  // console.log(e.target)
+  e.target.style.display = 'none'
+  const textArea = createElement('textarea', 'card')
+  textArea.placeholder = 'Enter a title for this card...'
+  const container = createElement('div', 'cardCreater')
+  const button = createElement('button', 'addButton')
+  button.setAttribute('id', 'addButton')
+  button.innerHTML = 'Add card'
+  const span = createElement('span', 'closeButton')
+  span.setAttribute('id', 'closecard')
+  span.innerHTML = '&times;'
+  container.appendChild(textArea)
+  container.appendChild(button)
+  container.appendChild(span)
+  span.addEventListener('click', closeCreateCard)
+  mainDiv.insertBefore(container, mainDiv.lastChild)
+  button.addEventListener('click', checkCard)
+}
+
+const closeCreateCard = function () {
+  const div = document.getElementsByClassName('cardCreater') //  HTML collection
+  console.log(div)
+  div[0].style.display = 'none'
+  createCardLink()
 }
 
 const checkCard = function () {
   const textArea = document.getElementsByClassName('card')
   if (textArea[0].value) {
-    addCard(textArea[0].value)
     const cardDetails = { title: textArea[0].value, list_id: '1' }
     const options = {
       method: 'POST',
@@ -71,88 +100,134 @@ const checkCard = function () {
     fetch('http://localhost:5000/trillo/cards', options)
       .then(res => res.json())
       .then(res => {
-        console.log(res)
-      // addListId(res.list_id)
+        addCard(res.cards[0].title, res.cards[0].id)
+        // addListId(res.list_id)
       })
     // const listTitle = document.getElementsByClassName('card')
     textArea[0].value = ''
   }
 }
 
-const createCard = function (e) {
-  // console.log(e.target)
-  e.target.style.display = 'none'
-  // console.log(e.target.parentNode)
-  const textArea = createElement('textarea', 'card')
-  // textArea.setAttribute('class', 'card')
-  textArea.placeholder = 'Enter a title for this card...'
-  e.target.parentNode.parentNode.insertBefore(textArea, e.target.parentNode.parentNode.lastChild)
-  const container = document.createElement('div')
-  const button = createElement('button', 'addButton')
-  button.setAttribute('id', 'addButton')
-  button.innerHTML = 'Add card'
-  const span = document.createElement('span')
-  span.innerHTML = '&times;'
-  span.setAttribute('class', 'closeButton')
-  container.appendChild(button)
-  container.appendChild(span)
-  e.target.parentNode.parentNode.insertBefore(container, e.target.parentNode.parentNode.lastChild)
-  button.addEventListener('click', checkCard)
+const addCard = function (cardTitle, id) {
+  const card = createCardBox(cardTitle, id)
+  displayCard(card)
 }
 
-const createListTitle = function (listTitle) {
-  const span = addListId(listTitle)
-  listTitleDiv.style.display = 'none'
-  mainDiv.style.backgroundColor = 'rgba(0,0,0,.12)'
-  mainDiv.appendChild(span)
-  const span2 = createElement('span', 'createCard')
-  const a = createElement('a', 'createCardLink')
-  a.style.color = '#798d99'
-  a.textContent = 'Add a card'
-  span2.appendChild(a)
-  mainDiv.appendChild(span2)
-  span2.addEventListener('click', createCard)
+const displayCard = function (card) {
+  const listTitle = document.getElementById('title')
+  listTitle.appendChild(card)
+  document.getElementById('placeholder').style.display = 'none'
 }
 
-createListTitle('1')
-
-fetch('http://localhost:5000/trillo/cards')
-  .then(res => res.json())
-  .then(data => {
-    let items = data['items']
-    console.log(items)
-    for (let item in items) {
-      // console.log(items[item]['title'])
-      console.log(item)
-      addCard(items[item]['title'])
+const deleteCard = function (e) {
+  console.log(e.target.parentNode.parentNode.parentNode)
+  const parent = document.getElementById('title')
+  console.log(parent.childNodes[0])
+  parent.removeChild(parent.childNodes[1])
+  const cardDetails = { title: e.target.parentNode.textContent, list_id: '1', id: e.target.parentNode.id }
+  const options = {
+    method: 'DELETE',
+    body: JSON.stringify(cardDetails),
+    headers: {
+      'Accept-Encoding': 'application/json',
+      'Content-Type': 'application/json'
     }
-    console.log(data)
-  })
-
-const checkListTitle = function () {
-  const input = document.getElementById('inputForList')
-  console.log(input)
-  if (input.value) {
-    createListTitle(input.value)
-    input.value = ''
-    mainDiv.style.backgroundColor = '#dfe3e6'
   }
-}
-const createList = function (e) {
-  listTitleDiv.style.display = 'block'
-  mainDiv.style.backgroundColor = '#dfe3e6'
-  e.target.style.display = 'none'
-  listAddButton.addEventListener('click', checkListTitle)
-  // closeButton.addEventListener('click', listLinkAgain)
+
+  fetch('http://localhost:5000/trillo/cards/' + e.target.parentNode.id, options)
+    .then(res => res.json())
+    .then(res => console.log(res))
 }
 
-const addListLink = function () {
-  const span = document.createElement('span')
-  span.setAttribute('id', 'placeholder')
-  span.textContent = '+ Add list'
-  mainDiv.appendChild(span)
-  span.addEventListener('click', createList)
+const createCardBox = function (cardName, id) {
+  const spanCard = createElement('span', 'cardSpan')
+  const card = createElement('div', 'cardholder')
+  card.setAttribute('id', 'card')
+  spanCard.textContent = cardName
+  spanCard.setAttribute('id', id)
+  const i = createElement('i', 'fas fa-pencil-alt')
+  const i2 = createElement('i', 'fas fa-trash-alt')
+  spanCard.appendChild(i2)
+  spanCard.appendChild(i)
+  i.addEventListener('click', editCard)
+  i2.addEventListener('click', deleteCard)
+  // i2.addEventListener('click', deleteCard)
+  card.appendChild(spanCard)
+  return card
 }
+
+const editCard = function (e) {
+  const update = document.querySelector('.updateTask')
+  const span = e.target.parentNode
+  const textArea = createElement('textArea', 'editFeild')
+  textArea.textContent = span.textContent
+  update.appendChild(textArea)
+  update.classList.toggle('show-modal')
+  const button = createElement('button', 'saveButton')
+  button.setAttribute('id', span.id)
+  button.textContent = 'save'
+  update.appendChild(button)
+  button.addEventListener('click', saveCard)
+}
+
+const saveCard = function (e) {
+  const update = document.querySelector('.updateTask')
+  // const textArea = document.querySelector('.editFeild')
+  console.log(e.target.previousSibling)
+  const textArea = e.target.previousSibling
+  const span = document.getElementById(e.target.id)
+  // console.log(span)
+  span.textContent = textArea.value
+  const i = createElement('i', 'fas fa-pencil-alt')
+  const i2 = createElement('i', 'fas fa-trash-alt')
+  span.appendChild(i)
+  span.appendChild(i2)
+  i.addEventListener('click', editCard)
+  // console.log(span)
+  const cardDetails = { title: textArea.value, list_id: '1' }
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify(cardDetails),
+    headers: {
+      'Accept-Encoding': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  }
+  fetch('http://localhost:5000/trillo/cards/' + e.target.id, options)
+    .then(res => res.json())
+    .then(res => console.log(res))
+
+  update.classList.toggle('show-modal')
+}
+
+const addListId = function (listId) {
+  const span = createElement('span', 'listtitle')
+  span.textContent = listId
+  span.setAttribute('id', 'title')
+  return span
+}
+
+const createElement = function (element, classVal) {
+  const span = document.createElement(element)
+  span.setAttribute('class', classVal)
+  return span
+}
+// createListTitle('1')
+
+// fetch('http://localhost:5000/trillo/cards')
+//   .then(res => res.json())
+//   .then(data => {
+//     let items = data['cards']
+//     // console.log(items)
+//     for (let item in items) {
+//       // console.log(items[item]['title'])
+//       // console.log(items[item]['id'])
+//       addCard(items[item]['title'], items[item]['id'])
+//     }
+//     document.getElementById('placeholder').style.display = 'none'
+//     // console.log(data)
+//   })
+
 addListLink()
 
 // const listLinkAgain = function (e) {
